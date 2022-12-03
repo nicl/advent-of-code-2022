@@ -15,13 +15,10 @@ func part2() {
 	trimmed := strings.TrimSpace(string(input))
 	lines := strings.Split(trimmed, "\n")
 
-	batches := [][]string{}
-	for i := 0; i < len(lines); i += 3 {
-		batches = append(batches, lines[i:i+3])
-	}
-
 	sum := 0
-	for _, batch := range batches {
+	for i := 0; i < len(lines); i += 3 {
+		batch := lines[i : i+3]
+
 		first := batch[0]
 		second := batch[1]
 		third := batch[2]
