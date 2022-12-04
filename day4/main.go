@@ -1,8 +1,8 @@
 package main
 
 import (
+	"fmt"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -15,19 +15,19 @@ func (r Range) contains(b Range) bool {
 }
 
 func (r Range) intersects(b Range) bool {
-	return (r.from >= b.from && r.from <= b.to) || (r.to >= b.from && r.to <= b.to) || (r.from < b.from && r.to > b.to)
+	return r.from <= b.to && b.from <= r.to
 }
 
 func main() {
-	part1()
-	part2()
-}
-
-func part1() {
 	input, _ := os.ReadFile("input.txt")
 	trimmed := strings.TrimSpace(string(input))
 	lines := strings.Split(trimmed, "\n")
 
+	part1(lines)
+	part2(lines)
+}
+
+func part1(lines []string) {
 	count := 0
 	for _, line := range lines {
 		a, b := getRanges(line)
@@ -39,11 +39,7 @@ func part1() {
 	println(count)
 }
 
-func part2() {
-	input, _ := os.ReadFile("input.txt")
-	trimmed := strings.TrimSpace(string(input))
-	lines := strings.Split(trimmed, "\n")
-
+func part2(lines []string) {
 	count := 0
 	for _, line := range lines {
 		a, b := getRanges(line)
@@ -56,13 +52,7 @@ func part2() {
 }
 
 func getRanges(line string) (Range, Range) {
-	parts := strings.Split(line, ",")
-	return getRange(parts[0]), getRange(parts[1])
-}
-
-func getRange(part string) Range {
-	parts := strings.Split(part, "-")
-	from, _ := strconv.Atoi(parts[0])
-	to, _ := strconv.Atoi(parts[1])
-	return Range{from, to}
+	var aFrom, aTo, bFrom, bTo int
+	fmt.Sscanf(line, "%d-%d,%d-%d", &aFrom, &aTo, &bFrom, &bTo)
+	return Range{aFrom, aTo}, Range{bFrom, bTo}
 }
