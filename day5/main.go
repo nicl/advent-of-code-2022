@@ -57,19 +57,19 @@ type Cmd struct {
 }
 
 func (stacks Stacks) move9001(cmd Cmd) {
-	stackFrom := stacks[cmd.from-1]
-	stackTo := stacks[cmd.to-1]
+	stackFrom := stacks[cmd.from]
+	stackTo := stacks[cmd.to]
 	crates := stackFrom[len(stackFrom)-cmd.n:]
 
-	stacks[cmd.from-1] = stackFrom[:len(stackFrom)-cmd.n]
-	stacks[cmd.to-1] = append(stackTo, crates...)
+	stacks[cmd.from] = stackFrom[:len(stackFrom)-cmd.n]
+	stacks[cmd.to] = append(stackTo, crates...)
 }
 
 func (stacks Stacks) move(cmd Cmd) {
 	for i := 0; i < cmd.n; i++ {
 		var crate string
-		stacks[cmd.from-1], crate = stacks[cmd.from-1].Pop()
-		stacks[cmd.to-1] = stacks[cmd.to-1].Push(crate)
+		stacks[cmd.from], crate = stacks[cmd.from].Pop()
+		stacks[cmd.to] = stacks[cmd.to].Push(crate)
 	}
 }
 
@@ -81,7 +81,7 @@ func parseCommands(input string) []Cmd {
 	for _, line := range lines {
 		var n, from, to int
 		fmt.Sscanf(line, "move %d from %d to %d", &n, &from, &to)
-		commands = append(commands, Cmd{n, from, to})
+		commands = append(commands, Cmd{n: n, from: from - 1, to: to - 1})
 	}
 
 	return commands
