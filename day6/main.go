@@ -22,10 +22,12 @@ func marker(n int) int {
 func uniq(items []byte) bool {
 	seen := map[byte]bool{}
 	for _, b := range items {
-		if !seen[b] {
-			seen[b] = true
+		if seen[b] {
+			return false
 		}
+
+		seen[b] = true
 	}
 
-	return len(seen) == len(items)
+	return true
 }
