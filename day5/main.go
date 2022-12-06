@@ -59,10 +59,9 @@ type Cmd struct {
 func (stacks Stacks) move9001(cmd Cmd) {
 	stackFrom := stacks[cmd.from]
 	stackTo := stacks[cmd.to]
-	crates := stackFrom[len(stackFrom)-cmd.n:]
 
 	stacks[cmd.from] = stackFrom[:len(stackFrom)-cmd.n]
-	stacks[cmd.to] = append(stackTo, crates...)
+	stacks[cmd.to] = append(stackTo, stackFrom[len(stackFrom)-cmd.n:]...)
 }
 
 func (stacks Stacks) move(cmd Cmd) {
