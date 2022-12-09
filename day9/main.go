@@ -42,12 +42,11 @@ func moveTail(head, tail Point) Point {
 	dX := head.X - tail.X
 	dY := head.Y - tail.Y
 
-	switch {
-	case abs(dX) <= 1 && abs(dY) <= 1:
+	if abs(dX) <= 1 && abs(dY) <= 1 {
 		return tail
-	default:
-		return Point{tail.X + sign(dX), tail.Y + sign(dY)}
 	}
+
+	return Point{tail.X + sign(dX), tail.Y + sign(dY)}
 }
 
 func find[A any](items []A, fn func(item A) bool) (int, bool) {
