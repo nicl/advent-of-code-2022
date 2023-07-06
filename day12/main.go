@@ -47,8 +47,10 @@ func main() {
 	println(minSteps)
 }
 
+// This is simpler than Djikstra as all edges are the same length. We take
+// advantage of this fact throughout.
 func steps(grid Grid, start, end Point) (int, bool) {
-	links := map[Point]Point{} // point->previous
+	links := map[Point]Point{} // point->previous, the optimal path
 	priorityQueue := []Edge{{start, start}}
 
 	found := false
@@ -59,8 +61,7 @@ func steps(grid Grid, start, end Point) (int, bool) {
 		}
 
 		for _, edge := range priorityQueue {
-			//fmt.Println("Processing: ", edge)
-			priorityQueue = priorityQueue[1:]
+			priorityQueue = priorityQueue[1:] // a 'stack'
 
 			if edge.to.Is(end) {
 				links[edge.to] = edge.from
@@ -71,7 +72,7 @@ func steps(grid Grid, start, end Point) (int, bool) {
 			_, ok := links[edge.to]
 			if !ok {
 				links[edge.to] = edge.from
-				es := unseen(links, edges(grid, edge.to))
+				es := filterUnseen(links, filterEdges(grid, edge.to))
 				priorityQueue = append(priorityQueue, es...)
 			}
 		}
@@ -80,7 +81,7 @@ func steps(grid Grid, start, end Point) (int, bool) {
 	return traceSteps(links, end, 0), found
 }
 
-func edges(grid Grid, from Point) []Edge {
+func filterEdges(grid Grid, from Point) []Edge {
 	es := []Edge{}
 	height := len(grid)
 	width := len(grid[0])
@@ -112,7 +113,7 @@ func findStartingPoints(grid Grid) []Point {
 	return found
 }
 
-func unseen(links map[Point]Point, edges []Edge) []Edge {
+func filterUnseen(links map[Point]Point, edges []Edge) []Edge {
 	es := []Edge{}
 
 	for _, edge := range edges {
